@@ -1,0 +1,20 @@
+{
+  "name": "up-school---yz-proje",
+  "version": "1.0.0",
+  "description": "A full-stack skincare intelligence web app that eliminates ingredient guesswork. Users check products against their personal trigger blacklist, build AM/PM routines with real-time conflict detection, and track consistency with streaks and badges. Admins manage the entire product and ingredient catalog through a dedicated dashboard.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sinemnagod/Up-School---YZ-proje.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sinemnagod/Up-School---YZ-proje/issues"
+  },
+  "homepage": "https://github.com/sinemnagod/Up-School---YZ-proje#readme"
+}
