@@ -1,18 +1,21 @@
 .counter {
   font-size: 16px;
   padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--accent);
-  background: var(--accent-bg);
+  border-radius: var(--radius-md, 8px);
+  font-family: var(--ff-body);
+  color: var(--gl-white);
+  background: var(--gl-moss);
   border: 2px solid transparent;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, opacity 0.15s;
   margin-bottom: 24px;
+  cursor: pointer;
 
   &:hover {
-    border-color: var(--accent-border);
+    border-color: var(--gl-plum);
+    opacity: 0.92;
   }
   &:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--gl-wildrose);
     outline-offset: 2px;
   }
 }
@@ -72,7 +75,7 @@
 
 #next-steps {
   display: flex;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--gl-dustypetal);
   text-align: left;
 
   & > div {
@@ -87,6 +90,7 @@
     margin-bottom: 16px;
     width: 22px;
     height: 22px;
+    fill: var(--gl-plum);
   }
 
   @media (max-width: 1024px) {
@@ -96,11 +100,11 @@
 }
 
 #docs {
-  border-right: 1px solid var(--border);
+  border-right: 1px solid var(--gl-dustypetal);
 
   @media (max-width: 1024px) {
     border-right: none;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--gl-dustypetal);
   }
 }
 
@@ -116,19 +120,22 @@
   }
 
   a {
-    color: var(--text-h);
+    color: var(--gl-plum);
     font-size: 16px;
+    font-family: var(--ff-body);
     border-radius: 6px;
-    background: var(--social-bg);
+    background: var(--gl-petalmist);
+    border: 0.5px solid var(--gl-pebble);
     display: flex;
     padding: 6px 12px;
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    transition: box-shadow 0.3s;
+    transition: box-shadow 0.3s, border-color 0.15s;
 
     &:hover {
-      box-shadow: var(--shadow);
+      border-color: var(--gl-wildrose);
+      box-shadow: 0 4px 12px rgba(60, 24, 40, 0.08);
     }
     .button-icon {
       height: 18px;
@@ -153,9 +160,29 @@
   }
 }
 
+#center h1,
+#next-steps h2 {
+  font-family: var(--ff-display);
+  color: var(--gl-ink);
+}
+
+#center p,
+#next-steps p {
+  font-family: var(--ff-body);
+  color: var(--gl-stone);
+}
+
+code {
+  font-family: ui-monospace, monospace;
+  color: var(--gl-plum);
+  background: var(--gl-softbloom);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm, 6px);
+}
+
 #spacer {
   height: 88px;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--gl-dustypetal);
   @media (max-width: 1024px) {
     height: 48px;
   }
@@ -167,7 +194,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: -4.5px;
     border: 5px solid transparent;
@@ -175,10 +202,10 @@
 
   &::before {
     left: 0;
-    border-left-color: var(--border);
+    border-left-color: var(--gl-dustypetal);
   }
   &::after {
     right: 0;
-    border-right-color: var(--border);
+    border-right-color: var(--gl-dustypetal);
   }
 }
