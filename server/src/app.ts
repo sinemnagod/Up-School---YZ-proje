@@ -2,6 +2,7 @@ import cors from 'cors'
 import express from 'express'
 import authRoutes    from './routes/auth.routes'
 import productRoutes from './routes/product.routes'
+import adminRoutes   from './routes/admin.routes'
 
 const app = express()
 
@@ -18,6 +19,6 @@ app.get('/api/v1/health', (_req, res) => {
 
 app.use('/api/v1/auth',     authRoutes)
 app.use('/api/v1/products', productRoutes)
-app.use('/api/v1/admin/products', productRoutes)
+app.use('/api/v1/admin',    adminRoutes)
 
 export default app
