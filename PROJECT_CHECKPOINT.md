@@ -1,95 +1,185 @@
 # GlowLogic Project Checkpoint
 
-Last updated: 2026-05-10
+Last updated: 2026-05-16
 
-## Where We Stopped
+## Current Status
 
-- Backend setup is complete and running.
-- Frontend scaffold is ready.
-- Design system **v2.0 (“Bloom Palette”)** is wired: global CSS + Tailwind `gl-*` tokens + starter `App.css` aligned to tokens.
+**Demo milestone complete.** Frontend and backend are connected and working.
 
-## Completed Work
+---
+
+## What Is Built
 
 ### Backend (`server/`)
 
-- Dependencies installed (`express`, `prisma`, `@prisma/client`, `bcrypt`, `jsonwebtoken`, `zod`, `multer`, `cloudinary`, etc.).
-- Prisma stack aligned to v5 (`prisma@5`, `@prisma/client@5`).
-- Prisma schema created at `server/prisma/schema.prisma`.
-- Migration applied successfully.
-- Seed script created and executed: `server/prisma/seed.ts`.
-- Admin account seeded:
-  - Email: `admin@glowlogic.com`
-  - Password: `Admin1234!`
-- Server entry files created:
-  - `server/src/app.ts`
-  - `server/src/index.ts`
-- Health check verified:
-  - `GET http://localhost:3001/api/v1/health` -> `{"status":"ok"}`
+- ✅ Express server running on `http://localhost:3001`
+- ✅ PostgreSQL database with all 16 tables migrated
+- ✅ Prisma ORM connected (`server/src/config/db.ts`)
+- ✅ Auth service (`server/src/services/auth.service.ts`)
+  - Register new user (bcrypt password hashing)
+  - Login (returns JWT access token + refresh token)
+  - Logout (clears refresh token from DB)
+- ✅ JWT auth middleware (`server/src/middleware/auth.ts`)
+  - `requireAuth` — protects any route that needs login
+  - `requireAdmin` — protects admin-only routes
+- ✅ Auth controller + routes (`/api/v1/auth`)
+  - `POST /api/v1/auth/register`
+  - `POST /api/v1/auth/login`
+  - `POST /api/v1/auth/logout`
+- ✅ Products controller + routes
+  - `GET /api/v1/products` — public, returns all published products
+  - `GET /api/v1/products/:id` — public, returns one product with ingredients
+  - `POST /api/v1/admin/products` — admin only, create product
+  - `PUT /api/v1/admin/products/:id` — admin only, update product
+  - `DELETE /api/v1/admin/products/:id` — admin only, delete product
+- ✅ Refresh tokens stored in PostgreSQL (no Redis needed)
+- ✅ Seed data: 3 sample products, admin account
 
 ### Frontend (`client/`)
 
-- React + Vite + TypeScript project created.
-- Core dependencies installed (React Router, TanStack Query, Axios, Zustand, RHF, Zod).
-- Tailwind v3 installed and configured.
+- ✅ React 18 + Vite + TypeScript
+- ✅ React Router v6 with protected routes
+- ✅ Zustand auth store with localStorage persistence (`client/src/store/authStore.ts`)
+- ✅ Axios API client with automatic token injection (`client/src/api/client.ts`)
+- ✅ Login page (`/login`) — form, error handling, redirects to products on success
+- ✅ Register page (`/register`) — form, error handling, redirects to login on success
+- ✅ Products page (`/products`) — protected, fetches real data from backend, product cards
+- ✅ Log out button — clears auth state, redirects to login
+- ✅ Design system v2.0 (Bloom Palette) fully wired
+  - Tailwind `gl-*` color tokens
+  - Cormorant Garamond display font + DM Sans body font
+  - Parchment background, Plum header, Softbloom cards
 
-### Design System Integration (v2.0)
+### Design System (`glowlogic_design_system_v2.md`)
 
-- Authoritative doc in repo: `glowlogic_design_system_v2.md`
-- **`client/src/index.css`** — full **Section 14** (imports, `@tailwind` layers, `:root`, base body, scrollbar, `:focus-visible`).
-- **`client/tailwind.config.ts`** — **Section 13** palette (`nightbloom`, `plum`, `wildrose`, `dustypetal`, `blush`, `softbloom`, `petalmist`, `parchment`, `moss`, `pollen`, `lavender`, `danger`, derived tokens, fonts, typography sizes, radii).
-- **`client/src/App.css`** — migrated from old Vite template variables (`--accent`, `--border`, etc.) to **`--gl-*`** / **`--ff-*`** only.
+- ✅ Full color palette (Nightbloom, Plum, Wild Rose, Dusty Petal, Blush, Soft Bloom, Petal Mist, Parchment)
+- ✅ Button system (Moss = primary, Pollen = secondary, Lavender = ghost, Coral Flame = danger)
+- ✅ Typography (Cormorant Garamond display, DM Sans UI)
+- ✅ Component specs (cards, badges, alerts, navigation, footer)
 
-## Palette migration (v1 → v2)
+---
 
-| Old mental model | New token(s) |
-|------------------|---------------|
-| `forest` / primary green | **`moss`** |
-| `sage` / secondary green | **`pollen`** (secondary / caution — not a 1:1 hue match) |
-| `mist` / light green surface | **`softbloom`** (card surfaces) |
-| `snow` page bg | **`parchment`** |
-| darkest text anchor | **`ink`** (= **nightbloom** hex in v2) |
+## Admin Account (seeded)
 
-## Rules to Keep Applying
+```
+Email:    admin@glowlogic.com
+Password: Admin1234!
+```
 
-- Use GlowLogic design system **v2** consistently.
-- Page background: **`gl-parchment`**. Prefer **`gl-softbloom`** for cards (not arbitrary white/warm grays outside `gl-white`).
-- Colors in UI should use **`gl-*`** Tailwind classes or **`var(--gl-*)`** in CSS.
-- Display headings: **`font-display`**. Body / UI copy: **`font-body`**.
+---
 
-## Next Step
+## File Structure (current)
 
-Continue **Phase 1** implementation:
+```
+server/src/
+├── config/
+│   └── db.ts                      ← Prisma client singleton
+├── middleware/
+│   └── auth.ts                    ← JWT auth + admin guards
+├── routes/
+│   ├── auth.routes.ts
+│   └── product.routes.ts
+├── controllers/
+│   ├── auth.controller.ts
+│   └── product.controller.ts
+├── services/
+│   └── auth.service.ts
+├── app.ts
+└── index.ts
 
-1. Express foundation hardening (error middleware, route composition).
-2. Auth routes/controller (`register`, `login`, `refresh`, `logout`).
-3. JWT auth middleware.
-4. React routing skeleton + auth store.
-5. Login / Register pages (using v2 buttons / inputs from design doc).
+client/src/
+├── api/
+│   └── client.ts                  ← Axios instance
+├── store/
+│   └── authStore.ts               ← Zustand auth state
+├── pages/
+│   ├── LoginPage.tsx
+│   ├── RegisterPage.tsx
+│   └── ProductsPage.tsx
+├── App.tsx                        ← Router + protected routes
+├── index.css                      ← Design system tokens
+└── main.tsx
+```
 
-## Useful Commands
+---
 
-### Backend
+## How to Run Locally
+
+**Terminal 1 — Backend:**
 
 ```bash
-cd "/Users/sinemdogan/Desktop/Up School - YZ Proje/server"
+cd server
 npm run dev
 ```
 
-### Frontend
+Runs at: `http://localhost:3001`
+Health check: `http://localhost:3001/api/v1/health`
+
+**Terminal 2 — Frontend:**
 
 ```bash
-cd "/Users/sinemdogan/Desktop/Up School - YZ Proje/client"
+cd client
 npm run dev
 ```
 
-### Database
+Runs at: `http://localhost:5173`
+
+**Database:**
 
 ```bash
-cd "/Users/sinemdogan/Desktop/Up School - YZ Proje/server"
-npx prisma migrate dev
-npx prisma db seed
+cd server
+npx prisma migrate dev    # run migrations
+npx prisma db seed        # seed starter data
+npx prisma studio         # visual DB browser at localhost:5555
 ```
 
-## Resume Prompt (copy/paste next time)
+---
 
-`Continue from PROJECT_CHECKPOINT.md. Use glowlogic_design_system_v2.md. Start from the "Next Step" section and proceed slowly, step by step.`
+## What Is NOT Built Yet (post-demo roadmap)
+
+### Phase 2 — Admin Core
+
+- [ ] Admin dashboard page
+- [ ] Ingredient CRUD (admin)
+- [ ] Product CRUD with image upload (admin form UI)
+- [ ] Conflict rule management (admin)
+
+### Phase 3 — User Core
+
+- [ ] Onboarding flow (skin type selection)
+- [ ] Trigger blacklist (add/remove ingredients to avoid)
+- [ ] Product detail page (ingredient list with badges)
+- [ ] Smart product search + filters
+
+### Phase 4 — Intelligence
+
+- [ ] AM/PM routine builder
+- [ ] Conflict check engine (AHA + Retinol alerts, etc.)
+- [ ] Ingredient overload detector
+- [ ] Safe alternatives suggestions
+- [ ] Compatibility scoring per skin type
+
+### Phase 5 — Engagement
+
+- [ ] Daily check-in system
+- [ ] Streak tracker (dynamic calculation)
+- [ ] Badge milestones (Day 3, 7, 15, 30, 50, 75, 100)
+- [ ] Challenges
+
+### Phase 6 — Polish
+
+- [ ] Admin analytics dashboard
+- [ ] Mobile responsive layout
+- [ ] Toast notifications
+- [ ] Loading skeletons
+
+---
+
+## Resume Prompt (copy/paste into Cursor next session)
+
+```
+Continue from PROJECT_CHECKPOINT.md.
+Use glowlogic_design_system_v2.md for all colors, fonts, and components.
+Use glowlogic_cursor_guide.md for API structure, DB schema, and business logic.
+Start from Phase 2 — Admin Core. Build one step at a time.
+```
