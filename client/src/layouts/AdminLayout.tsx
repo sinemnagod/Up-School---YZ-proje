@@ -5,6 +5,7 @@ const navItems = [
   { to: '/admin',             label: 'Dashboard',   exact: true },
   { to: '/admin/products',    label: 'Products'  },
   { to: '/admin/ingredients', label: 'Ingredients' },
+  { to: '/admin/conflict-rules', label: 'Conflict Rules' },
 ]
 
 export default function AdminLayout() {
