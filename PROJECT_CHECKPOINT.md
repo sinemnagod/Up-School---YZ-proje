@@ -1,10 +1,10 @@
 # GlowLogic Project Checkpoint
 
-Last updated: 2026-05-16
+Last updated: 2026-05-31
 
 ## Current Status
 
-**Demo milestone complete.** Frontend and backend are connected and working.
+**Phases 1–5 complete.** Full-stack application built and connected. All user-facing pages, admin panel, backend API, and database are working.
 
 ---
 
@@ -15,56 +15,92 @@ Last updated: 2026-05-16
 - ✅ Express server running on `http://localhost:3001`
 - ✅ PostgreSQL database with all 16 tables migrated
 - ✅ Prisma ORM connected (`server/src/config/db.ts`)
-- ✅ Auth service (`server/src/services/auth.service.ts`)
-  - Register new user (bcrypt password hashing)
-  - Login (returns JWT access token + refresh token)
-  - Logout (clears refresh token from DB)
-- ✅ JWT auth middleware (`server/src/middleware/auth.ts`)
-  - `requireAuth` — protects any route that needs login
-  - `requireAdmin` — protects admin-only routes
-- ✅ Auth controller + routes (`/api/v1/auth`)
-  - `POST /api/v1/auth/register`
-  - `POST /api/v1/auth/login`
-  - `POST /api/v1/auth/logout`
-- ✅ Products controller + routes
-  - `GET /api/v1/products` — public, returns all published products
-  - `GET /api/v1/products/:id` — public, returns one product with ingredients
-  - `POST /api/v1/admin/products` — admin only, create product
-  - `PUT /api/v1/admin/products/:id` — admin only, update product
-  - `DELETE /api/v1/admin/products/:id` — admin only, delete product
-- ✅ Refresh tokens stored in PostgreSQL (no Redis needed)
-- ✅ Seed data: 3 sample products, admin account
+- ✅ Auth service with bcrypt + JWT (access token 15min, refresh token 7d)
+- ✅ Refresh tokens stored in PostgreSQL (no Redis)
+- ✅ JWT middleware — `requireAuth` + `requireAdmin` guards
+
+#### API Endpoints
+
+**Auth**
+
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/logout`
+
+**Products (public)**
+
+- `GET /api/v1/products` — all published products
+- `GET /api/v1/products/:id` — single product with ingredients
+
+**User**
+
+- `GET /api/v1/user/profile`
+- `PUT /api/v1/user/profile`
+- `GET /api/v1/user/triggers`
+- `POST /api/v1/user/triggers`
+- `DELETE /api/v1/user/triggers/:id`
+
+**Routine**
+
+- `GET /api/v1/routine`
+- `PUT /api/v1/routine`
+- `GET /api/v1/routine/conflicts`
+
+**Streaks & Engagement**
+
+- `GET /api/v1/streaks`
+- `POST /api/v1/streaks` ← check-in endpoint
+- `GET /api/v1/streaks/badges`
+- `GET /api/v1/challenges`
+- `GET /api/v1/challenges/mine`
+- `POST /api/v1/challenges/:id/enroll`
+
+**Admin (all require admin role)**
+
+- `GET/POST /api/v1/admin/products`
+- `GET/PUT/DELETE /api/v1/admin/products/:id`
+- `GET/POST /api/v1/admin/ingredients`
+- `GET/PUT/DELETE /api/v1/admin/ingredients/:id`
+- `GET/POST /api/v1/admin/conflict-rules`
+- `GET/PUT/DELETE /api/v1/admin/conflict-rules/:id`
+- `PATCH /api/v1/admin/conflict-rules/:id/toggle`
+- `GET /api/v1/admin/stats`
+
+---
 
 ### Frontend (`client/`)
 
 - ✅ React 18 + Vite + TypeScript
-- ✅ React Router v6 with protected routes
-- ✅ Zustand auth store with localStorage persistence (`client/src/store/authStore.ts`)
-- ✅ Axios API client with automatic token injection (`client/src/api/client.ts`)
-- ✅ Login page (`/login`) — form, error handling, redirects to products on success
-- ✅ Register page (`/register`) — form, error handling, redirects to login on success
-- ✅ Products page (`/products`) — protected, fetches real data from backend, product cards
-- ✅ Log out button — clears auth state, redirects to login
+- ✅ React Router v6 with protected + admin-only routes
+- ✅ Zustand auth store with localStorage persistence
+- ✅ Axios API client with automatic token injection
 - ✅ Design system v2.0 (Bloom Palette) fully wired
-  - Tailwind `gl-*` color tokens
-  - Cormorant Garamond display font + DM Sans body font
-  - Parchment background, Plum header, Softbloom cards
 
-### Design System (`glowlogic_design_system_v2.md`)
+#### Pages Built
 
-- ✅ Full color palette (Nightbloom, Plum, Wild Rose, Dusty Petal, Blush, Soft Bloom, Petal Mist, Parchment)
-- ✅ Button system (Moss = primary, Pollen = secondary, Lavender = ghost, Coral Flame = danger)
-- ✅ Typography (Cormorant Garamond display, DM Sans UI)
-- ✅ Component specs (cards, badges, alerts, navigation, footer)
+**User facing**
 
----
+- ✅ `/login` — login form with error handling
+- ✅ `/register` — register form with error handling
+- ✅ `/products` — product catalog with search, clickable cards
+- ✅ `/products/:id` — product detail with full ingredient list, irritation badges, hover tooltips
+- ✅ `/profile` — skin type selector + trigger blacklist (add/remove ingredients to avoid)
+- ✅ `/dashboard` — AM/PM streak cards, check-in buttons, badges, challenges progress
+- ✅ `/routine` — AM/PM routine builder, product search modal, conflict alerts, overload warnings
+- ✅ `/challenges` — browse challenges, enroll, track progress
 
-## Admin Account (seeded)
+**Admin panel (access via `localhost:5173/admin` — no nav link by design)**
 
-```
-Email:    admin@glowlogic.com
-Password: Admin1234!
-```
+- ✅ `/admin` — dashboard with product/ingredient/user stats
+- ✅ `/admin/products` — product table with publish toggle, edit, delete
+- ✅ `/admin/products/new` — add product form (name, brand, category, description, image upload to Cloudinary, ingredients multi-select, skin types, publish toggle)
+- ✅ `/admin/products/:id/edit` — edit product form
+- ✅ `/admin/ingredients` — ingredient table with status badges
+- ✅ `/admin/ingredients/new` — add ingredient form (INCI name, common name, functions, comedogenic rating, irritation level, skin type flags, notes)
+- ✅ `/admin/ingredients/:id/edit` — edit ingredient form
+- ✅ `/admin/conflict-rules` — conflict rule table with toggle active/inactive
+- ✅ `/admin/conflict-rules/new` — add rule form (ingredient A + B, scope, alert type, severity, explanation)
+- ✅ `/admin/conflict-rules/:id/edit` — edit rule form
 
 ---
 
@@ -73,12 +109,17 @@ Password: Admin1234!
 ```
 server/src/
 ├── config/
-│   └── db.ts                      ← Prisma client singleton
+│   └── db.ts
 ├── middleware/
-│   └── auth.ts                    ← JWT auth + admin guards
+│   └── auth.ts
 ├── routes/
 │   ├── auth.routes.ts
-│   └── product.routes.ts
+│   ├── product.routes.ts
+│   ├── admin.routes.ts
+│   ├── user.routes.ts
+│   ├── routine.routes.ts
+│   ├── streaks.routes.ts
+│   └── challenges.routes.ts
 ├── controllers/
 │   ├── auth.controller.ts
 │   └── product.controller.ts
@@ -89,17 +130,44 @@ server/src/
 
 client/src/
 ├── api/
-│   └── client.ts                  ← Axios instance
+│   └── client.ts
 ├── store/
-│   └── authStore.ts               ← Zustand auth state
+│   └── authStore.ts
+├── layouts/
+│   └── AdminLayout.tsx
 ├── pages/
 │   ├── LoginPage.tsx
 │   ├── RegisterPage.tsx
-│   └── ProductsPage.tsx
-├── App.tsx                        ← Router + protected routes
-├── index.css                      ← Design system tokens
+│   ├── ProductsPage.tsx
+│   ├── ProductDetailPage.tsx
+│   ├── ProfilePage.tsx
+│   ├── DashboardPage.tsx
+│   ├── RoutinePage.tsx
+│   ├── ChallengesPage.tsx
+│   └── admin/
+│       ├── AdminDashboardPage.tsx
+│       ├── AdminProductsPage.tsx
+│       ├── AdminProductFormPage.tsx
+│       ├── AdminIngredientsPage.tsx
+│       ├── AdminIngredientFormPage.tsx
+│       ├── AdminConflictRulesPage.tsx
+│       └── AdminConflictRuleFormPage.tsx
+├── App.tsx
+├── index.css
 └── main.tsx
 ```
+
+---
+
+## Admin Account (seeded)
+
+```
+Email:    admin@glowlogic.com
+Password: Admin1234!
+```
+
+Access the admin panel at: `localhost:5173/admin`
+There is no nav link to the admin panel by design — admins access it directly via URL.
 
 ---
 
@@ -128,58 +196,40 @@ Runs at: `http://localhost:5173`
 
 ```bash
 cd server
-npx prisma migrate dev    # run migrations
-npx prisma db seed        # seed starter data
-npx prisma studio         # visual DB browser at localhost:5555
+npx prisma migrate dev     # run migrations
+npx prisma db seed         # seed starter data
+npx prisma studio          # visual DB browser at localhost:5555
 ```
 
 ---
 
-## What Is NOT Built Yet (post-demo roadmap)
+## What Is NOT Built Yet (Phase 6)
 
-### Phase 2 — Admin Core
+### Polish
 
-- [ ] Admin dashboard page
-- [ ] Ingredient CRUD (admin)
-- [ ] Product CRUD with image upload (admin form UI)
-- [ ] Conflict rule management (admin)
-
-### Phase 3 — User Core
-
-- [ ] Onboarding flow (skin type selection)
-- [ ] Trigger blacklist (add/remove ingredients to avoid)
-- [ ] Product detail page (ingredient list with badges)
-- [ ] Smart product search + filters
-
-### Phase 4 — Intelligence
-
-- [ ] AM/PM routine builder
-- [ ] Conflict check engine (AHA + Retinol alerts, etc.)
-- [ ] Ingredient overload detector
-- [ ] Safe alternatives suggestions
-- [ ] Compatibility scoring per skin type
-
-### Phase 5 — Engagement
-
-- [ ] Daily check-in system
-- [ ] Streak tracker (dynamic calculation)
-- [ ] Badge milestones (Day 3, 7, 15, 30, 50, 75, 100)
-- [ ] Challenges
-
-### Phase 6 — Polish
-
-- [ ] Admin analytics dashboard
+- [ ] Safe alternatives engine (suggest products when trigger is hit)
+- [ ] Compatibility scoring per skin type (shown on product cards)
+- [ ] Toast notifications (success/error feedback)
 - [ ] Mobile responsive layout
-- [ ] Toast notifications
 - [ ] Loading skeletons
+- [ ] Admin analytics dashboard (most flagged ingredients, badge completion rates)
+
+### Deployment
+
+- [ ] Switch database from local PostgreSQL to Supabase ← **reminder: do this first**
+- [ ] Deploy backend (Railway or Render)
+- [ ] Deploy frontend (Vercel)
+- [ ] Set up environment variables on hosting platforms
+- [ ] Update README with live URLs
 
 ---
 
-## Resume Prompt (copy/paste into Cursor next session)
+## Resume Prompt (copy/paste to start next session)
 
 ```
-Continue from PROJECT_CHECKPOINT.md.
+Continue GlowLogic from PROJECT_CHECKPOINT.md.
+Phases 1–5 are complete. We are now on Phase 6 — Polish + Deployment.
 Use glowlogic_design_system_v2.md for all colors, fonts, and components.
-Use glowlogic_cursor_guide.md for API structure, DB schema, and business logic.
-Start from Phase 2 — Admin Core. Build one step at a time.
+Use glowlogic_cursor_guide.md for API structure and business logic.
+First task: switch database to Supabase, then deploy.
 ```
