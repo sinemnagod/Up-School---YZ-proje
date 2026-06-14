@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/client'
+import { getApiErrorMessage } from '../utils/apiError'
+import { toastSuccess } from '../store/toastStore'
 
 export default function RegisterPage() {
   const navigate = useNavigate()
@@ -15,9 +17,10 @@ export default function RegisterPage() {
     setLoading(true)
     try {
       await api.post('/auth/register', { email, password })
+      toastSuccess('Account created! Please sign in.')
       navigate('/login')
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? 'Something went wrong')
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err))
     } finally {
       setLoading(false)
     }

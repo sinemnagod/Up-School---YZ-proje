@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../api/client'
 import { useAuthStore } from '../store/authStore'
+import { getApiErrorMessage } from '../utils/apiError'
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -18,9 +19,9 @@ export default function LoginPage() {
     try {
       const { data } = await api.post('/auth/login', { email, password })
       setAuth(data.user, data.accessToken)
-      navigate('/products')
-    } catch (err: any) {
-      setError(err.response?.data?.error ?? 'Something went wrong')
+      navigate('/challenges')
+    } catch (err: unknown) {
+      setError(getApiErrorMessage(err))
     } finally {
       setLoading(false)
     }

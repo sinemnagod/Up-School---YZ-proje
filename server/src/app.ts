@@ -7,6 +7,8 @@ import userRoutes       from './routes/user.routes'
 import routineRoutes    from './routes/routine.routes'
 import streaksRoutes    from './routes/streaks.routes'
 import challengeRoutes  from './routes/challenges.routes'
+import aiRoutes from './routes/ai.routes'
+import ingredientRoutes from './routes/ingredients.routes'
 
 const app = express()
 
@@ -28,5 +30,7 @@ app.use('/api/v1/user',       userRoutes)
 app.use('/api/v1/routine',    routineRoutes)
 app.use('/api/v1/streaks',    streaksRoutes)
 app.use('/api/v1/challenges', challengeRoutes)
+app.use('/api/v1/ingredients', ingredientRoutes)
+app.use('/api/v1/ai', aiRoutes)
 
 export default app
