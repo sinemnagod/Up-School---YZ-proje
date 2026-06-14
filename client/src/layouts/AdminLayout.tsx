@@ -2,9 +2,9 @@ import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authStore'
 
 const navItems = [
-  { to: '/admin',             label: 'Dashboard',   exact: true },
-  { to: '/admin/products',    label: 'Products'  },
-  { to: '/admin/ingredients', label: 'Ingredients' },
+  { to: '/admin',                label: 'Dashboard',     exact: true },
+  { to: '/admin/products',       label: 'Products'       },
+  { to: '/admin/ingredients',    label: 'Ingredients'    },
   { to: '/admin/conflict-rules', label: 'Conflict Rules' },
 ]
 
@@ -14,16 +14,15 @@ export default function AdminLayout() {
 
   function handleLogout() {
     clearAuth()
-    navigate('/login')
+    navigate('/')
   }
 
   return (
     <div className="min-h-screen bg-gl-parchment flex flex-col">
-
-      {/* Top bar */}
       <header className="bg-gl-plum px-6 py-4 flex items-center justify-between">
         <span className="font-display text-2xl text-gl-petalmist">
-          GlowLogic <span className="text-gl-dustypetal text-lg font-body font-normal">Admin</span>
+          GlowLogic{' '}
+          <span className="text-gl-dustypetal text-lg font-body font-normal">Admin</span>
         </span>
         <div className="flex items-center gap-4">
           <span className="text-gl-blush text-sm">{user?.email}</span>
@@ -36,10 +35,8 @@ export default function AdminLayout() {
         </div>
       </header>
 
-      <div className="flex flex-1">
-
-        {/* Sidebar */}
-        <aside className="w-52 bg-gl-softbloom border-r border-gl-dustypetal p-4 flex flex-col gap-1">
+      <div className="flex flex-1 overflow-hidden">
+        <aside className="w-52 bg-gl-softbloom border-r border-gl-dustypetal p-4 flex flex-col gap-1 flex-shrink-0">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -57,12 +54,9 @@ export default function AdminLayout() {
             </NavLink>
           ))}
         </aside>
-
-        {/* Page content */}
         <main className="flex-1 p-8 overflow-y-auto">
           <Outlet />
         </main>
-
       </div>
     </div>
   )
